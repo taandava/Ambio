@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
+@Suppress("FunctionName")
 fun BlankHomeScreen(
     onCreateMixClicked: () -> Unit,
 ) {

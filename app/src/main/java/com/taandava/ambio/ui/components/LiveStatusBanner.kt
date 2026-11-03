@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
+@Suppress("FunctionName")
 fun LiveStatusBanner(
     isPlaying: Boolean,
     activeChannelsCount: Int,

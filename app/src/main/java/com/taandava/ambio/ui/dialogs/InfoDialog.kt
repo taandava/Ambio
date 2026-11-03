@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 
 @Composable
+@Suppress("FunctionName")
 fun InfoDialog(
     onDismiss: () -> Unit,
 ) {

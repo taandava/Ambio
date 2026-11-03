@@ -32,6 +32,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 @Composable
+@Suppress("FunctionName")
 fun AmbioBottomBar(
     isPlaying: Boolean,
     onTogglePlay: () -> Unit,
@@ -62,7 +63,7 @@ fun AmbioBottomBar(
                     imageVector = Icons.Rounded.FolderSpecial,
                     contentDescription = "Saved Presets",
                     tint = Color(0xFFFBBF24),
-                    modifier = Modifier.size(26.dp)
+                    modifier = Modifier.size(26.dp),
                 )
             }
 
@@ -79,7 +80,7 @@ fun AmbioBottomBar(
                     imageVector = if (isPlaying) Icons.Rounded.Stop else Icons.Rounded.PlayArrow,
                     contentDescription = if (isPlaying) "Stop" else "Play",
                     tint = Color.White,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(30.dp),
                 )
             }
 
@@ -93,7 +94,7 @@ fun AmbioBottomBar(
                     imageVector = Icons.Rounded.Palette,
                     contentDescription = "Appearance",
                     tint = Color(0xFFA855F7),
-                    modifier = Modifier.size(26.dp)
+                    modifier = Modifier.size(26.dp),
                 )
             }
 
@@ -107,7 +108,7 @@ fun AmbioBottomBar(
                     imageVector = Icons.Rounded.Info,
                     contentDescription = "About",
                     tint = Color(0xFF38BDF8),
-                    modifier = Modifier.size(26.dp)
+                    modifier = Modifier.size(26.dp),
                 )
             }
         }

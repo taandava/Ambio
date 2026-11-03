@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import com.taandava.ambio.data.model.MixChannel
 
 @Composable
+@Suppress("FunctionName")
 fun MixerChannelRow(
     channel: MixChannel,
     onToggleMute: () -> Unit,

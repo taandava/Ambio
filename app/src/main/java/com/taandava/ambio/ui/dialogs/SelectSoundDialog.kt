@@ -63,6 +63,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
+@Suppress("FunctionName")
 fun SelectSoundDialog(
     customSounds: List<SoundItem>,
     onSelectSound: (SoundItem) -> Unit,
@@ -127,7 +128,7 @@ fun SelectSoundDialog(
                         imageVector = Icons.Rounded.FolderOpen,
                         contentDescription = "System Picker",
                         tint = Color(0xFFF59E0B),
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
@@ -148,7 +149,7 @@ fun SelectSoundDialog(
                             imageVector = Icons.Rounded.Search,
                             contentDescription = "Search",
                             tint = Color(0xFF38BDF8),
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
                         )
                     },
                     trailingIcon = {
@@ -158,7 +159,7 @@ fun SelectSoundDialog(
                                     imageVector = Icons.Rounded.Clear,
                                     contentDescription = "Clear search",
                                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.size(18.dp)
+                                    modifier = Modifier.size(18.dp),
                                 )
                             }
                         }
@@ -279,7 +280,7 @@ fun SelectSoundDialog(
                                                 imageVector = Icons.Rounded.GraphicEq,
                                                 contentDescription = null,
                                                 tint = Color(0xFF00E5FF),
-                                                modifier = Modifier.size(20.dp)
+                                                modifier = Modifier.size(20.dp),
                                             )
                                         }
                                         Spacer(modifier = Modifier.width(10.dp))
@@ -320,7 +321,7 @@ fun SelectSoundDialog(
                                                 imageVector = Icons.Rounded.Close,
                                                 contentDescription = "Remove Sound",
                                                 tint = Color(0xFFEF4444),
-                                                modifier = Modifier.size(18.dp)
+                                                modifier = Modifier.size(18.dp),
                                             )
                                         }
                                     }

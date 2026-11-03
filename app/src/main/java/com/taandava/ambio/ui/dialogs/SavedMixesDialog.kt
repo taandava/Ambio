@@ -47,6 +47,7 @@ import com.taandava.ambio.data.model.SavedMix
 import com.taandava.ambio.data.repository.MixStore
 
 @Composable
+@Suppress("FunctionName")
 fun SavedMixesDialog(
     mixStore: MixStore,
     activeMixId: String?,

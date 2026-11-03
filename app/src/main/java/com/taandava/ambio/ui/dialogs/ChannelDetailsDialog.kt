@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import com.taandava.ambio.data.model.MixChannel
 
 @Composable
+@Suppress("FunctionName")
 fun ChannelDetailsDialog(
     channel: MixChannel,
     onChangeSound: () -> Unit,

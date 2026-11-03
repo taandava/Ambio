@@ -17,7 +17,7 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = DarkOnBackground,
     onSurface = DarkOnSurface,
     onSurfaceVariant = DarkOnSurfaceVariant,
-    outline = DarkOutline
+    outline = DarkOutline,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -29,13 +29,14 @@ private val LightColorScheme = lightColorScheme(
     onBackground = LightOnBackground,
     onSurface = LightOnSurface,
     onSurfaceVariant = LightOnSurfaceVariant,
-    outline = LightOutline
+    outline = LightOutline,
 )
 
 @Composable
+@Suppress("FunctionName")
 fun AmbioTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val darkTheme = when (themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -47,6 +48,6 @@ fun AmbioTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        content = content
+        content = content,
     )
 }

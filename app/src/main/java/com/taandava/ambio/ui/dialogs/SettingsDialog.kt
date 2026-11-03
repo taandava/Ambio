@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.taandava.ambio.data.model.ThemeMode
 
 @Composable
+@Suppress("FunctionName")
 fun SettingsDialog(
     currentThemeMode: ThemeMode,
     onThemeModeSelected: (ThemeMode) -> Unit,

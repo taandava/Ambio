@@ -64,6 +64,7 @@ import com.taandava.ambio.ui.dialogs.SettingsDialog
 import com.taandava.ambio.ui.theme.AmbioTheme
 
 @Composable
+@Suppress("FunctionName")
 fun AmbioMixApp(
     getService: () -> PlaybackService?,
 ) {
