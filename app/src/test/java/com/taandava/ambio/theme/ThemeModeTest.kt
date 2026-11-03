@@ -31,3 +31,4 @@ class ThemeModeTest {
         assertEquals(ThemeMode.DARK, parsed)
     }
 }
+

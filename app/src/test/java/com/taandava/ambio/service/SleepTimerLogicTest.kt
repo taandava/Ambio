@@ -50,3 +50,4 @@ class SleepTimerLogicTest {
         assertEquals(0, computeFadedVolume(90, -5000L))
     }
 }
+

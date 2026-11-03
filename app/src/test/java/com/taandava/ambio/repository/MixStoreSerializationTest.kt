@@ -185,3 +185,4 @@ class MixStoreSerializationTest {
         assertNull(ch1.sound)
     }
 }
+

@@ -60,3 +60,4 @@ class SoundModelsTest {
         assertEquals(80, mix.channels[0].volume)
     }
 }
+
