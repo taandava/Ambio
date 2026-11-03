@@ -19,11 +19,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.VolumeDown
+import androidx.compose.material.icons.automirrored.rounded.VolumeOff
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
+import androidx.compose.material.icons.rounded.Bedtime
+import androidx.compose.material.icons.rounded.Cancel
+import androidx.compose.material.icons.rounded.GraphicEq
+import androidx.compose.material.icons.rounded.Headphones
+import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -48,127 +59,164 @@ fun LiveStatusBanner(
     activeChannelsCount: Int,
     masterVolume: Int,
     onMasterVolumeChanged: (Int) -> Unit,
-    sleepTimerRemainingSeconds: Long? = null,
-    onStartSleepTimer: (Int) -> Unit = {},
-    onCancelSleepTimer: () -> Unit = {},
+    sleepTimerRemainingSeconds: Long?,
+    onStartSleepTimer: (Int) -> Unit,
+    onCancelSleepTimer: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
-    val alphaAnim by infiniteTransition.animateFloat(
-        initialValue = 0.4f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(900),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "alpha"
-    )
-
     var showMasterSlider by remember { mutableStateOf(false) }
     var showSleepTimerDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
+    val pulseTransition = rememberInfiniteTransition(label = "pulse")
+    val dotAlpha by pulseTransition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 900),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "pulseAlpha",
+    )
+
+    Card(
+        modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp, horizontal = 4.dp)
+            .padding(horizontal = 14.dp, vertical = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(12.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
         ) {
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(
-                            if (isPlaying) MaterialTheme.colorScheme.primary.copy(alpha = alphaAnim)
-                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                        )
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = if (isPlaying) "Pure Harmony ($activeChannelsCount active)" else "Silent Sanctuary",
-                    fontSize = 13.sp,
-                    color = if (isPlaying) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1
-                )
-            }
+                // Left status with pulsating indicator
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(9.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (isPlaying) Color(0xFF10B981).copy(alpha = dotAlpha)
+                                else Color(0xFF94A3B8).copy(alpha = 0.6f),
+                            ),
+                    )
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Sleep Timer Trigger Button
-                val isTimerActive = sleepTimerRemainingSeconds != null && sleepTimerRemainingSeconds > 0
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Icon(
+                        imageVector = if (isPlaying) Icons.Rounded.GraphicEq else Icons.Rounded.Headphones,
+                        contentDescription = null,
+                        tint = if (isPlaying) Color(0xFF06B6D4) else Color(0xFF94A3B8),
+                        modifier = Modifier.size(16.dp),
+                    )
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    Text(
+                        text = if (isPlaying) "Playing • $activeChannelsCount voices" else "Standby",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+
+                // Sleep Timer trigger button
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
                         .background(
-                            if (isTimerActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                            else Color.Transparent
+                            if (sleepTimerRemainingSeconds != null && sleepTimerRemainingSeconds > 0) {
+                                Color(0xFFFBBF24).copy(alpha = 0.2f)
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            },
                         )
                         .clickable { showSleepTimerDialog = true }
-                        .padding(horizontal = 6.dp, vertical = 4.dp)
+                        .padding(horizontal = 7.dp, vertical = 5.dp),
                 ) {
-                    Text(text = "⏱️", fontSize = 14.sp)
-                    Spacer(modifier = Modifier.width(3.dp))
+                    Icon(
+                        imageVector = Icons.Rounded.Bedtime,
+                        contentDescription = "Sleep Timer",
+                        tint = if (sleepTimerRemainingSeconds != null && sleepTimerRemainingSeconds > 0) Color(0xFFFBBF24) else Color(0xFF94A3B8),
+                        modifier = Modifier.size(15.dp),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = if (isTimerActive) formatSecondsToTime(sleepTimerRemainingSeconds) else "Zzz",
+                        text = if (sleepTimerRemainingSeconds != null && sleepTimerRemainingSeconds > 0) {
+                            formatSecondsToTime(sleepTimerRemainingSeconds)
+                        } else {
+                            "Zzz"
+                        },
                         fontSize = 12.sp,
-                        color = if (isTimerActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = if (isTimerActive) FontWeight.Bold else FontWeight.Medium
+                        color = if (sleepTimerRemainingSeconds != null && sleepTimerRemainingSeconds > 0) Color(0xFFFBBF24) else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }
 
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(6.dp))
 
                 // Master Volume Trigger Button
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                         .clickable { showMasterSlider = !showMasterSlider }
-                        .padding(horizontal = 6.dp, vertical = 4.dp)
+                        .padding(horizontal = 7.dp, vertical = 5.dp),
                 ) {
-                    Text(text = "🔊", fontSize = 15.sp)
-                    Spacer(modifier = Modifier.width(3.dp))
+                    Icon(
+                        imageVector = if (masterVolume == 0) Icons.AutoMirrored.Rounded.VolumeOff
+                        else if (masterVolume < 50) Icons.AutoMirrored.Rounded.VolumeDown
+                        else Icons.AutoMirrored.Rounded.VolumeUp,
+                        contentDescription = "Master Volume",
+                        tint = Color(0xFF10B981),
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "$masterVolume%",
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }
             }
-        }
 
-        if (showMasterSlider) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, bottom = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Master",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp,
-                    modifier = Modifier.width(48.dp)
-                )
-                Slider(
-                    value = masterVolume.toFloat(),
-                    onValueChange = { onMasterVolumeChanged(it.toInt()) },
-                    valueRange = 0f..100f,
-                    colors = SliderDefaults.colors(
-                        thumbColor = MaterialTheme.colorScheme.primary,
-                        activeTrackColor = MaterialTheme.colorScheme.primary,
-                        inactiveTrackColor = MaterialTheme.colorScheme.outline
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
+            // Expandable Master Volume Slider
+            if (showMasterSlider) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Master Vol",
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.width(65.dp),
+                    )
+                    Slider(
+                        value = masterVolume.toFloat(),
+                        onValueChange = { onMasterVolumeChanged(it.toInt()) },
+                        valueRange = 0f..100f,
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.primary,
+                            inactiveTrackColor = MaterialTheme.colorScheme.outline,
+                        ),
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
     }
@@ -180,12 +228,21 @@ fun LiveStatusBanner(
         AlertDialog(
             onDismissRequest = { showSleepTimerDialog = false },
             title = {
-                Text(
-                    text = "Sleep Timer (Zzz)",
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Rounded.Bedtime,
+                        contentDescription = null,
+                        tint = Color(0xFFFBBF24),
+                        modifier = Modifier.size(24.dp),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Sleep Timer (Zzz)",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    )
+                }
             },
             text = {
                 Column(modifier = Modifier.fillMaxWidth()) {
@@ -193,38 +250,54 @@ fun LiveStatusBanner(
                         text = "Ambio gently eases the soundscape down over the last 15 seconds before turning off.",
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        lineHeight = 18.sp
+                        lineHeight = 18.sp,
                     )
 
                     Spacer(modifier = Modifier.height(14.dp))
 
                     if (isTimerActive) {
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFFBBF24).copy(alpha = 0.15f)),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 12.dp)
+                                .padding(bottom = 12.dp),
                         ) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(12.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(
-                                    text = "Active: ${formatSecondsToTime(sleepTimerRemainingSeconds)} remaining",
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 13.sp
-                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Timer,
+                                        contentDescription = null,
+                                        tint = Color(0xFFFBBF24),
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "${formatSecondsToTime(sleepTimerRemainingSeconds)} remaining",
+                                        color = Color(0xFFFBBF24),
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 13.sp,
+                                    )
+                                }
                                 TextButton(
                                     onClick = {
                                         onCancelSleepTimer()
                                         showSleepTimerDialog = false
-                                    }
+                                    },
                                 ) {
-                                    Text("Turn Off", color = MaterialTheme.colorScheme.error)
+                                    Icon(
+                                        imageVector = Icons.Rounded.Cancel,
+                                        contentDescription = null,
+                                        tint = Color(0xFFEF4444),
+                                        modifier = Modifier.size(16.dp),
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Turn Off", color = Color(0xFFEF4444))
                                 }
                             }
                         }
@@ -234,13 +307,13 @@ fun LiveStatusBanner(
                         text = "Quick Presets:",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         presets.take(3).forEach { mins ->
                             Button(
@@ -250,13 +323,20 @@ fun LiveStatusBanner(
                                 },
                                 modifier = Modifier.weight(1f),
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(8.dp),
                             ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Schedule,
+                                    contentDescription = null,
+                                    tint = Color(0xFF38BDF8),
+                                    modifier = Modifier.size(14.dp),
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = "${mins}m",
                                     color = MaterialTheme.colorScheme.onSurface,
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
                                 )
                             }
                         }
@@ -266,7 +346,7 @@ fun LiveStatusBanner(
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         presets.drop(3).forEach { mins ->
                             Button(
@@ -276,13 +356,20 @@ fun LiveStatusBanner(
                                 },
                                 modifier = Modifier.weight(1f),
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(8.dp),
                             ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Schedule,
+                                    contentDescription = null,
+                                    tint = Color(0xFF38BDF8),
+                                    modifier = Modifier.size(14.dp),
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = "${mins}m",
                                     color = MaterialTheme.colorScheme.onSurface,
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
                                 )
                             }
                         }
@@ -295,7 +382,7 @@ fun LiveStatusBanner(
                     Text("Close", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         )
     }
 }

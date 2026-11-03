@@ -21,12 +21,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.FolderOpen
+import androidx.compose.material.icons.rounded.GraphicEq
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -42,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -115,7 +123,12 @@ fun SelectSoundDialog(
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                     shape = RoundedCornerShape(8.dp),
                 ) {
-                    Text(text = "📁", fontSize = 18.sp)
+                    Icon(
+                        imageVector = Icons.Rounded.FolderOpen,
+                        contentDescription = "System Picker",
+                        tint = Color(0xFFF59E0B),
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Select from System Picker",
@@ -130,11 +143,23 @@ fun SelectSoundDialog(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     placeholder = { Text("Search device sounds...") },
-                    leadingIcon = { Text(text = "🔍", fontSize = 16.sp) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = "Search",
+                            tint = Color(0xFF38BDF8),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = { searchQuery = "" }) {
-                                Text(text = "✖️", fontSize = 14.sp)
+                                Icon(
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "Clear search",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(18.dp)
+                                )
                             }
                         }
                     },
@@ -247,10 +272,15 @@ fun SelectSoundDialog(
                                             modifier = Modifier
                                                 .size(36.dp)
                                                 .clip(RoundedCornerShape(6.dp))
-                                                .background(MaterialTheme.colorScheme.surface),
+                                                .background(Color(0xFF00E5FF).copy(alpha = 0.15f)),
                                             contentAlignment = Alignment.Center,
                                         ) {
-                                            Text(text = "🎵", fontSize = 18.sp)
+                                            Icon(
+                                                imageVector = Icons.Rounded.GraphicEq,
+                                                contentDescription = null,
+                                                tint = Color(0xFF00E5FF),
+                                                modifier = Modifier.size(20.dp)
+                                            )
                                         }
                                         Spacer(modifier = Modifier.width(10.dp))
                                         Column(modifier = Modifier.weight(1f)) {
@@ -286,7 +316,12 @@ fun SelectSoundDialog(
                                             onClick = { onDeleteCustomSound(sound.id) },
                                             modifier = Modifier.size(28.dp),
                                         ) {
-                                            Text(text = "✖️", fontSize = 14.sp)
+                                            Icon(
+                                                imageVector = Icons.Rounded.Close,
+                                                contentDescription = "Remove Sound",
+                                                tint = Color(0xFFEF4444),
+                                                modifier = Modifier.size(18.dp)
+                                            )
                                         }
                                     }
                                 }

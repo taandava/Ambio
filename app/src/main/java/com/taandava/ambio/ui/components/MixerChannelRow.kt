@@ -16,8 +16,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.VolumeOff
+import androidx.compose.material.icons.rounded.AddCircleOutline
+import androidx.compose.material.icons.rounded.AllInclusive
+import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.GraphicEq
+import androidx.compose.material.icons.rounded.Timer
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -41,88 +50,99 @@ fun MixerChannelRow(
     onVolumeChanged: (Int) -> Unit,
     onEmptySlotClicked: () -> Unit,
     onChannelDetailsClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isFilled = channel.sound != null
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(68.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .clickable {
-                if (isFilled) onChannelDetailsClicked() else onEmptySlotClicked()
-            },
+            .padding(horizontal = 14.dp, vertical = 3.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isFilled) {
-                if (channel.isMuted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                else MaterialTheme.colorScheme.surface
-            } else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            containerColor = if (isFilled) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f),
         ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (isFilled) {
-                if (channel.isMuted) MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
-                else MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-            } else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
-        )
+        border = if (isFilled && !channel.isMuted) BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
+        else BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)),
+        shape = RoundedCornerShape(12.dp),
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
+            // Channel Action/Icon Box (Mute/Unmute or Add)
             Box(
                 modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(46.dp)
+                    .clip(RoundedCornerShape(10.dp))
                     .background(
-                        if (!isFilled) MaterialTheme.colorScheme.surfaceVariant
-                        else if (channel.isMuted) MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
-                        else MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                        when {
+                            !isFilled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                            channel.isMuted -> MaterialTheme.colorScheme.surfaceVariant
+                            else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                        },
                     )
                     .border(
-                        width = if (isFilled && !channel.isMuted) 1.5.dp else 1.dp,
-                        color = if (!isFilled) MaterialTheme.colorScheme.outline
-                        else if (channel.isMuted) Color(0xFFEF4444)
-                        else MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
+                        width = 1.dp,
+                        color = when {
+                            !isFilled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            channel.isMuted -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                        },
+                        shape = RoundedCornerShape(10.dp),
                     )
                     .clickable {
                         if (isFilled) onToggleMute() else onEmptySlotClicked()
                     },
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 if (isFilled) {
                     if (channel.isMuted) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                            verticalArrangement = Arrangement.Center,
                         ) {
-                            Text(text = "🔇", fontSize = 18.sp)
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.VolumeOff,
+                                contentDescription = "Muted",
+                                tint = Color(0xFFEF4444),
+                                modifier = Modifier.size(20.dp),
+                            )
                             Text(
                                 text = "OFF",
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFEF4444)
+                                color = Color(0xFFEF4444),
                             )
                         }
                     } else {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                            verticalArrangement = Arrangement.Center,
                         ) {
-                            Text(text = "🎵", fontSize = 18.sp)
+                            Icon(
+                                imageVector = Icons.Rounded.GraphicEq,
+                                contentDescription = "Playing",
+                                tint = Color(0xFF00E5FF),
+                                modifier = Modifier.size(20.dp),
+                            )
                             Text(
                                 text = "ON",
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                     }
                 } else {
-                    Text(text = "➕", fontSize = 20.sp)
+                    Icon(
+                        imageVector = Icons.Rounded.AddCircleOutline,
+                        contentDescription = "Add Sound Track",
+                        tint = Color(0xFF38BDF8),
+                        modifier = Modifier.size(24.dp),
+                    )
                 }
             }
 
@@ -133,12 +153,12 @@ fun MixerChannelRow(
                     modifier = Modifier
                         .weight(1f)
                         .padding(vertical = 4.dp),
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = channel.displayName,
@@ -148,33 +168,54 @@ fun MixerChannelRow(
                             else MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             if ((channel.pitch != 1.0f) || (channel.speed != 1.0f)) {
-                                Text(
-                                    text = "⚡",
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(end = 4.dp)
+                                Icon(
+                                    imageVector = Icons.Rounded.Bolt,
+                                    contentDescription = "Pitch/Speed Modulated",
+                                    tint = Color(0xFFFBBF24),
+                                    modifier = Modifier
+                                        .size(16.dp)
+                                        .padding(end = 2.dp),
                                 )
                             }
 
-                            Text(
-                                text = if (channel.repeatIntervalSec == 0) "∞"
-                                else "⏱ ${channel.repeatIntervalSec}s${if (channel.isFuzzyRepeat) " ~" else ""}",
-                                fontSize = 11.sp,
-                                color = if (channel.isMuted) MaterialTheme.colorScheme.onSurfaceVariant
-                                else MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Bold,
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(
                                         if (channel.isMuted) MaterialTheme.colorScheme.surfaceVariant
-                                        else MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                        else MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                                     )
-                                    .padding(horizontal = 6.dp, vertical = 2.dp)
-                            )
+                                    .padding(horizontal = 6.dp, vertical = 2.dp),
+                            ) {
+                                if (channel.repeatIntervalSec == 0) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.AllInclusive,
+                                        contentDescription = "Loop Continuous",
+                                        tint = if (channel.isMuted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(13.dp),
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Timer,
+                                        contentDescription = "Repeat Interval",
+                                        tint = if (channel.isMuted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(12.dp),
+                                    )
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Text(
+                                        text = "${channel.repeatIntervalSec}s${if (channel.isFuzzyRepeat) " ~" else ""}",
+                                        fontSize = 11.sp,
+                                        color = if (channel.isMuted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                            }
                         }
                     }
 
@@ -186,32 +227,37 @@ fun MixerChannelRow(
                         colors = SliderDefaults.colors(
                             thumbColor = if (channel.isMuted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
                             activeTrackColor = if (channel.isMuted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
-                            inactiveTrackColor = MaterialTheme.colorScheme.outline
+                            inactiveTrackColor = MaterialTheme.colorScheme.outline,
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(26.dp)
+                            .height(26.dp),
                     )
                 }
 
                 IconButton(
                     onClick = onChannelDetailsClicked,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(36.dp),
                 ) {
-                    Text(text = "🎚️", fontSize = 18.sp)
+                    Icon(
+                        imageVector = Icons.Rounded.Tune,
+                        contentDescription = "Channel Settings",
+                        tint = Color(0xFFF59E0B),
+                        modifier = Modifier.size(20.dp),
+                    )
                 }
             } else {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "CH ${channel.channelId + 1} — Tap to invite a sound...",
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
                     )
                 }
             }
