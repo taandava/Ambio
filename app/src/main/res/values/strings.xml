@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ambio</string>
+    <string name="notification_channel_name">Ambio Audio</string>
+    <string name="notification_channel_description">Controls for ambient sound mixing</string>
+</resources>

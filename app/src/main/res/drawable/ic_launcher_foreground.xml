@@ -1,0 +1,83 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- WhatsApp-Style Headphone Emoji 🎧 Project-Aware Launcher Icon -->
+
+    <!-- Ambient Soundwave Arches -->
+    <path
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M23,53 A18,18 0 0,0 23,71" />
+    <path
+        android:strokeColor="#0284C7"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M17,47 A26,26 0 0,0 17,77" />
+
+    <path
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M85,53 A18,18 0 0,1 85,71" />
+    <path
+        android:strokeColor="#0284C7"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M91,47 A26,26 0 0,1 91,77" />
+
+    <!-- Headband Cushion (Inner arch) -->
+    <path
+        android:fillColor="#1E293B"
+        android:pathData="M33,56 C33,35 42,28 54,28 C66,28 75,35 75,56 C73,55 65,33 54,33 C43,33 35,55 33,56 Z" />
+
+    <!-- Headband Main Arc -->
+    <path
+        android:fillColor="#0284C7"
+        android:pathData="M32,54 C32,31 41,23 54,23 C67,23 76,31 76,54 L73,55 C73,34 65,26 54,26 C43,26 35,34 35,55 Z" />
+
+    <!-- Headband Specular Top Highlight -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M44,24.5 C48,23.5 60,23.5 64,24.5 C62,25.2 46,25.2 44,24.5 Z" />
+
+    <!-- Left & Right Hinge Joints -->
+    <path
+        android:fillColor="#94A3B8"
+        android:pathData="M30.5,52 h5 v6 h-5 z" />
+    <path
+        android:fillColor="#94A3B8"
+        android:pathData="M72.5,52 h5 v6 h-5 z" />
+
+    <!-- Left Ear Cup - Cushion Pad -->
+    <path
+        android:fillColor="#0F172A"
+        android:pathData="M31,56 C34,56 36,60 36,66 C36,72 34,76 31,76 C29,76 28,72 28,66 C28,60 29,56 31,56 Z" />
+
+    <!-- Left Ear Cup - Outer Housing (Cyan Glossy Shell) -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M27,55 C31,55 33,59 33,66 C33,73 31,77 27,77 C24,77 23,73 23,66 C23,59 24,55 27,55 Z" />
+
+    <!-- Left Ear Cup - Highlight -->
+    <path
+        android:fillColor="#E0F7FA"
+        android:pathData="M25.5,58 C26.5,58 27.5,61 27.5,65 C27.5,67 27,68 26,68 C25,68 24.5,66 24.5,64 C24.5,60 25,58 25.5,58 Z" />
+
+    <!-- Right Ear Cup - Cushion Pad -->
+    <path
+        android:fillColor="#0F172A"
+        android:pathData="M77,56 C79,56 80,60 80,66 C80,72 79,76 77,76 C74,76 72,72 72,66 C72,60 74,56 77,56 Z" />
+
+    <!-- Right Ear Cup - Outer Housing (Cyan Glossy Shell) -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M81,55 C84,55 85,59 85,66 C85,73 84,77 81,77 C77,77 75,73 75,66 C75,59 77,55 81,55 Z" />
+
+    <!-- Right Ear Cup - Highlight -->
+    <path
+        android:fillColor="#E0F7FA"
+        android:pathData="M82.5,58 C83.5,58 84,60 84,64 C84,66 83.5,68 82.5,68 C81.5,68 81,67 81,65 C81,61 82,58 82.5,58 Z" />
+</vector>
